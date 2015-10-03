@@ -37,7 +37,7 @@
                               "DISABLE" or "MODE" or "BLEUART" or
                               "HWUART"  or "SPI"  or "MANUAL"
     -----------------------------------------------------------------------*/
-    #define FACTORYRESET_ENABLE         1
+    #define FACTORYRESET_ENABLE         0
     #define MINIMUM_FIRMWARE_VERSION    "0.6.6"
     #define MODE_LED_BEHAVIOUR          "MODE"
 /*=========================================================================*/
@@ -45,6 +45,7 @@
 // Create the bluefruit object
 /* ...hardware SPI, using SCK/MOSI/MISO hardware SPI pins and then user selected CS/IRQ/RST */
 Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
+
 // function prototypes over in packetparser.cpp
 uint8_t readPacket(Adafruit_BLE *ble, uint16_t timeout);
 float parsefloat(uint8_t *buffer);
@@ -52,7 +53,6 @@ void printHex(const uint8_t * data, const uint32_t numBytes);
 
 // the packet buffer
 extern uint8_t packetbuffer[];
-
 
 #include <Adafruit_NeoPixel.h>
 
@@ -67,6 +67,7 @@ uint8_t blue = 8;
 void setup() {
   // put your setup code here, to run once:
    SetupBLE();
+
    strip.begin();
    SetAllPixelsToColor(0,0,0);
    strip.show(); // Initialize all pixels to 'off'
@@ -74,6 +75,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+
   /* Wait for new data to arrive */
   uint8_t len = readPacket(&ble, BLE_READPACKET_TIMEOUT);
   if (len == 0) return;
@@ -124,8 +126,8 @@ void error(const __FlashStringHelper*err) {
 /**************************************************************************/
 void SetupBLE()
 {
-  while (!Serial);  // required for Flora & Micro
-  delay(500);
+//  while (!Serial);  // required for Flora & Micro
+//  delay(500);
 
   Serial.begin(115200);
   Serial.println(F("Adafruit Bluefruit App Controller Example"));
